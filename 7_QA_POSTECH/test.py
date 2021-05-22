@@ -23,6 +23,7 @@ data = json.dumps(
 headers = {'Content-Type': 'application/json; charset=utf-8'} # optional
 
 response = requests.post(urljoin(URL, task_q), data=data, headers=headers)
+
 print(response.status_code)
 print(response.request)
 
