@@ -51,12 +51,12 @@ class MRCModel(object):
             for passage in dict["passage"]:
                 passage_concat += passage["text"]
 
-            answer, answer_context, supporting_facts, joint_f1, joint_em = self.get_qa_result(question, passage_concat)
+            answer, answer_context, supporting_fact, joint_f1, joint_em = self.get_qa_result(question, passage_concat)
 
             return {'question': question,
                     'answer': answer,
                     'answer_context': answer_context,
-                    'supporting_facts': supporting_facts,
+                    'supporting_fact': supporting_fact,
                     'joint_f1': joint_f1,
                     'joint_em': joint_em}
     
@@ -67,12 +67,12 @@ class MRCModel(object):
         answer_context = '{"value": "30", \
                            "numbers": [{"value": 24, "sign": 1}, {"value": 6, "sign": 1}, {"value": 50, "sign": 0}]}' # 24 + 6 = 30
         
-        supporting_facts = [['a', 1], ['b', 0], ['c', 1]] # second sentence in 'a' document & first sentence in 'b' document & second sentence in 'c' document
+        supporting_fact = "The Semmering railway (German: \"Semmeringbahn\" ) in Austria, which starts at Gloggnitz and leads over the Semmering to Mürzzuschlag was the first mountain railway in Europe built with a standard gauge track."
         
         joint_f1 = round(random.uniform(74, 76), 2)
         joint_em = round(random.uniform(47, 49), 2)
 
-        return answer, answer_context, supporting_facts, joint_f1, joint_em
+        return answer, answer_context, supporting_fact, joint_f1, joint_em
 
 if __name__ == "__main__":
     mrc = MRCModel()
