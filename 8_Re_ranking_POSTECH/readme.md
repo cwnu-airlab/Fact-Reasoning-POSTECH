@@ -1,4 +1,19 @@
 ## 8_Re_ranking_POSTECH
+## Example
+
+1. build the docker image and run it
+```bash
+    docker build --tag reranking_postech . 
+    docker run --gpus all --rm -d -it -p 12345:5000 --name rerank reranking_postech
+```
+
+2. test the app
+```bash
+    python3 test.py
+```
+
+
+
 ###input 형식
 질문(question) 및 여러 모듈의 answer list, supporting_fact list가 들어갑니다.
 

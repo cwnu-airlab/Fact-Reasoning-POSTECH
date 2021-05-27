@@ -3,7 +3,7 @@ import json
 import logging
 
 from flask import Flask, request, jsonify
-from agent_real import Service
+from agent import Service
 
 app = Flask(__name__)
 

@@ -57,13 +57,9 @@ class RerankModel(object):
 
             content["score"] = score
 
-            return json.dumps(content), 200
+            return content
         except Exception as e:
-            return json.dumps(
-                {
-                    'error': "{}".format(e)
-                }
-            ), 400
+            return {'error': "{}".format(e)}
 
     def get_score(self, question, answer, supporting_fact):
         return random()
