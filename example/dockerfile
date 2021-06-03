@@ -27,13 +27,15 @@ ADD app /root/app
 # ADD model files
 ADD t5_encoder_ner /root/app/t5_encoder_ner
 
-# you can manually copy files instead of the command below...
-RUN cd /root/app && \
-    git clone https://github.com/AIRC-KETI/ke-t5-downstreams.git && \
-    cd ke-t5-downstreams && \
-    git reset --hard 6b715114be904674ca060d0c3d768e94debba970 && \
-    pip install -r requirements.txt && \
-    cd src && mv ner_test.py ../../ && mv models ../../
+# # you can manually copy files instead of the command below...
+# RUN cd /root/app && \
+#     git clone https://github.com/AIRC-KETI/ke-t5-downstreams.git && \
+#     cd ke-t5-downstreams && \
+#     git reset --hard 6b715114be904674ca060d0c3d768e94debba970 && \
+#     pip install -r requirements.txt && \
+#     cd src && mv ner_test.py ../../ && mv models ../../
+
+RUN pip install pytorch-crf transformers sentencepiece
 
 WORKDIR /root/app
 
