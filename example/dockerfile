@@ -1,0 +1,45 @@
+# docker build -t factual_reasoning/ner_example .
+
+
+# docker run --gpus all --rm -d -it -p 12345:5000 --name ner_example factual_reasoning/ner_example
+# or if you use nvidia-docker
+# nvidia-docker run --rm -d -it -p 12345:5000 --name ner_example factual_reasoning/ner_example
+
+FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-devel
+LABEL maintainer "KETI AIRC sankim <kimsan0622@keti.re.kr>"
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
+    libglib2.0-0 libxext6 libsm6 libxrender1 \
+    git mercurial subversion locales rsync \
+    libc6 libstdc++6 python-minimal tar curl net-tools apt-utils
+
+RUN locale-gen en_US.UTF-8 && update-locale
+
+ENV LC_ALL=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+
+RUN pip install flask
+
+ADD app /root/app
+
+# ADD model files
+ADD t5_encoder_ner /root/app/t5_encoder_ner
+
+# # you can manually copy files instead of the command below...
+# RUN cd /root/app && \
+#     git clone https://github.com/AIRC-KETI/ke-t5-downstreams.git && \
+#     cd ke-t5-downstreams && \
+#     git reset --hard 6b715114be904674ca060d0c3d768e94debba970 && \
+#     pip install -r requirements.txt && \
+#     cd src && mv ner_test.py ../../ && mv models ../../
+
+RUN pip install pytorch-crf transformers sentencepiece
+
+WORKDIR /root/app
+
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+
+ENV SERVICE_PORT 5000
+EXPOSE ${SERVICE_PORT}
