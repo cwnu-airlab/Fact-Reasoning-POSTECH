@@ -45,7 +45,7 @@ class dummyModel(object):
 
             return self.search(query, max_num_retrieved=max_num_retrieved, max_hop=max_hop, num_retrieved=num_retrieved)
     
-    def search(self, query, max_num_retrived=10, max_hop=5,num_retrieved=-1):
+    def search(self, query, max_num_retrieved=10, max_hop=5,num_retrieved=-1):
         result = self.supporting_facts
         return {'supporting facts':result}
         
