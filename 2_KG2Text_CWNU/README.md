@@ -32,6 +32,6 @@ python test.py
 #### docker 실행
 
 ```bash
-docker build -t factual_reasoning/summary ./
-docker run --gpus all --rm -d -it -p 12342:5000 --name summary factual_reasoning/summary
+docker build -t factual_reasoning/kg2text ./
+docker run --gpus all --rm -d -it -p 12342:5000 --name kg2text factual_reasoning/kg2text
 ```
