@@ -6,7 +6,7 @@
 
 ## 01-Summerization-CWNU
 
-* 웹 API 정보: `http://220.68.54.38:12341`
+* 웹 API 정보: `http://220.68.54.38:12341` # 수정필요(현재 내부망에서만 접근 가능)
 
 * 입력 파라미터
   * 03-PassageRetrieval의 출력과 동일
@@ -55,7 +55,7 @@
 
 ## 02-KG2Text-CWNU
 
-* 웹 API 정보: 
+* 웹 API 정보: `http://aircketi.iptime.org:10022/`
 
 * 입력 파라미터
   * 06-KnowledgeMerging의 출력과 동일
