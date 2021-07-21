@@ -26,7 +26,7 @@
 
 ```json
 {
-  "query":{
+  "question":{
     "text":"데드풀 감독이랑 킬러의 보디가드 감독이 같은 사람이야?",
     "language":"kr",
     "domain":"common-sense"
@@ -98,7 +98,7 @@
 
 ```json
 {
-  "query":{
+  "question":{
     "text":"데드풀 감독이랑 킬러의 보디가드 감독이 같은 사람이야?",
     "language":"kr",
     "domain":"common-sense"
@@ -161,7 +161,7 @@
 
 ```json
 {
-  "query":{
+  "question":{
     "text":"데드풀 감독이랑 킬러의 보디가드 감독이 같은 사람이야?",
     "language":"kr",
     "domain":"common-sense"
@@ -200,7 +200,7 @@
 
 ```json
 {
-  "query":{
+  "question":{
     "text":"데드풀 감독이랑 킬러의 보디가드 감독이 같은 사람이야?",
     "language":"kr",
     "domain":"common-sense"
