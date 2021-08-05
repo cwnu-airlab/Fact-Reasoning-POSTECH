@@ -1,9 +1,15 @@
 # docker build -t factual_reasoning/passage_retrieval:dummay .
 
+# docker tag factual_reasoning/passage_retrieval:dummay 10.0.0.161:5000/passage_retrieval:dummay
+# docker push 10.0.0.161:5000/passage_retrieval:dummay
 
 # docker run --gpus all --rm -d -it -p 12345:5000 --name passage_retrieval factual_reasoning/passage_retrieval:dummay
 # or if you use nvidia-docker
 # nvidia-docker run --rm -d -it -p 12345:5000 --name passage_retrieval factual_reasoning/passage_retrieval:dummay
+
+# docker -H 10.0.0.110:2375 run --gpus all --rm -d -it --network="dockernet" --ip="10.1.92.121" --name passage_retrieval 10.0.0.161:5000/passage_retrieval:dummay
+
+# port: airckeit.iptime.org:10021 --> 10.1.92.121:5000
 
 FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-devel
 LABEL maintainer "KETI AIRC sankim <kimsan0622@keti.re.kr>"

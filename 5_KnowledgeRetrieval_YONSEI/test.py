@@ -2,7 +2,7 @@ import json
 import requests
 from urllib.parse import urljoin
 
-URL = 'http://aircketi.iptime.org:10021/'
+URL = 'http://127.0.0.1:12345/'
 
 # test task_list
 task_list_q = '/api/task_list'
@@ -13,7 +13,7 @@ print(response.text)
 # test task
 task_q = '/api/task'
 data = json.dumps(
-    {'query': "what's your name"}
+    {'query': "HELP ME!"}
     )
 headers = {'Content-Type': 'application/json; charset=utf-8'} # optional
 

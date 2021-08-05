@@ -1,4 +1,3 @@
-
 import json
 import random
 
@@ -48,8 +47,8 @@ class MRCModel(object):
         else:
             passage_concat = str()
 
-            for passage in dict["passage"]:
-                passage_concat += passage["text"]
+            for single_passage in passage:
+                passage_concat += single_passage["text"]
 
             answer, answer_context, supporting_fact, joint_f1, joint_em = self.get_qa_result(question, passage_concat)
 
@@ -76,6 +75,9 @@ class MRCModel(object):
 
 if __name__ == "__main__":
     mrc = MRCModel()
-    ret = mrc.answer_predict({'passage': 'passage_dummy', 'question': 'question_dummy'})
+    ret = mrc.answer_predict({"passage": [{"doc_id": "a", "score": 0.1, "text":"The Semmering railway (German: \"Semmeringbahn\" ) in Austria, which starts at Gloggnitz and leads over the Semmering to Mürzzuschlag was the first mountain railway in Europe built with a standard gauge track."},
+                    {"doc_id": "b", "score": 0.1, "text":"It is commonly referred to as the world's first true mountain railway, given the very difficult terrain and the considerable altitude difference that was mastered during its construction."},
+                    {"doc_id": "c", "score": 0.1, "text":"It is still fully functional as a part of the Southern Railway which is operated by the Austrian Federal Railways."}],
+        "question": "what is the first mountain railway in Europe?"})
     print(ret)
 

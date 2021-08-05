@@ -14,7 +14,7 @@
 
 
 
-###input 형식
+### input 형식
 질문(question) 및 여러 모듈의 answer list, supporting_fact list가 들어갑니다.
 
 supporting fact는 각 모듈당 하나의 문장(str)으로 concat해서 넣어주세요.
@@ -30,7 +30,7 @@ supporting fact는 각 모듈당 하나의 문장(str)으로 concat해서 넣어
 }
 ```
 
-###output 형식
+### output 형식
 각 answer, supporting fact pair에 대한 점수(score)가 같이 나옵니다.
 
 ```{

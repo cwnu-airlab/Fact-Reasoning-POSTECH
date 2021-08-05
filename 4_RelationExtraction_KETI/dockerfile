@@ -1,9 +1,15 @@
 # docker build -t factual_reasoning/relation_extraction:dummay .
 
+# docker tag factual_reasoning/relation_extraction:dummay 10.0.0.161:5000/relation_extraction:dummay
+# docker push 10.0.0.161:5000/relation_extraction:dummay
 
 # docker run --gpus all --rm -d -it -p 12345:5000 --name relation_extraction factual_reasoning/relation_extraction:dummay
 # or if you use nvidia-docker
 # nvidia-docker run --rm -d -it -p 12345:5000 --name relation_extraction factual_reasoning/relation_extraction:dummay
+
+# docker -H 10.0.0.110:2375 run --gpus all --rm -d -it --network="dockernet" --ip="10.1.92.122" --name relation_extraction 10.0.0.161:5000/relation_extraction:dummay
+
+# port: airckeit.iptime.org:10022 --> 10.1.92.122:5000
 
 FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-devel
 LABEL maintainer "KETI AIRC sankim <kimsan0622@keti.re.kr>"
