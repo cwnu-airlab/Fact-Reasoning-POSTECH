@@ -1,5 +1,8 @@
-from random import *
 import json
+import torch
+
+from transformers import ElectraForSequenceClassification, ElectraConfig, ElectraTokenizerFast
+import torch.nn.functional as F
 
 
 class Service:
@@ -35,32 +38,99 @@ class RerankModel(object):
     def __init__(self):
         self.device = 'cuda'
 
-    def rerank_pairs(self, content):
-        question = content.get("question", None)
-        answers = content.get("answers", None)
-        supporting_facts = content.get("supporting_facts", None)
+        # Initialize English Common-sense model
+        config_eng = ElectraConfig.from_pretrained("google/electra-base-discriminator")
+        config_eng.num_labels = 3
+        self.rerank_model_eng = ElectraForSequenceClassification(config=config_eng)
+        self.tokenizer_eng = ElectraTokenizerFast.from_pretrained("google/electra-base-discriminator")
 
-        if (question is None) or (answers is None) or (supporting_facts is None):
+        # Load English trained Model
+        checkpoint_eng = torch.load('0525_eng.pth', map_location=self.device)
+        self.rerank_model_eng.load_state_dict(checkpoint_eng['model'])
+        self.rerank_model_eng.to(self.device)
+
+        # Initialize Korean Common-sense model
+        config_kor = ElectraConfig.from_pretrained("monologg/koelectra-base-v3-discriminator")
+        config_kor.num_labels = 3
+        self.rerank_model_kor_common_sense = ElectraForSequenceClassification(config=config_kor)
+        self.rerank_model_kor_legal = ElectraForSequenceClassification(config=config_kor)
+        self.tokenizer_kor = ElectraTokenizerFast.from_pretrained("monologg/koelectra-base-v3-discriminator")
+
+        # Load Korean trained Model
+        checkpoint_kor_common_sense = torch.load('0513_kor.pth', map_location=self.device)
+        checkpoint_kor_legal = torch.load('0513_kor.pth', map_location=self.device)
+
+        self.rerank_model_kor_common_sense.load_state_dict(checkpoint_kor_common_sense['model'])
+        self.rerank_model_kor_common_sense.to(self.device)
+        self.rerank_model_kor_legal.load_state_dict(checkpoint_kor_legal['model'])
+        self.rerank_model_kor_legal.to(self.device)
+
+        self.rerank_model = None
+        self.tokenizer = None
+        self.domain = None
+        self.language = None
+
+    def check_input(self, content):
+        question = content.get("question", None)
+        answers = content.get("answer_list", None)
+        supporting_facts_span = content.get("supporting_facts_list", None)
+        supporting_facts_passage = content.get("supporting_passage_list", None)
+
+        if not question or not answers or not supporting_facts_passage:
             return {
                 'error': "invalid query"
             }
 
-        if len(answers) != len(supporting_facts):
+        if len(answers) != len(supporting_facts_passage):
             return {
                 'error': "(list of answer) and (list of supporting fact) should have same length for ranking"
             }
 
+        self.domain = question['domain']
+        self.language = question['language']
+
+        if self.language == 'kr':
+            if self.domain == 'common-sense':
+                self.rerank_model = self.rerank_model_kor_common_sense
+            else:
+                self.rerank_model = self.rerank_model_kor_legal
+            self.tokenizer = self.tokenizer_kor
+        else:
+            self.rerank_model = self.rerank_model_eng
+            self.tokenizer = self.tokenizer_eng
+
+        return question, answers, supporting_facts_passage
+
+    def rerank_pairs(self, content):
+        question, answers, supporting_facts_passage = self.check_input(content)
+        supporting_facts_passage_text = [qa_result["text"] for qa_result in supporting_facts_passage]
+
         try:
             score = []
-            for answer, supporting_fact in list(zip(answers, supporting_facts)):
-                score.append(self.get_score(question, answer, supporting_fact))
+            for answer, supporting_fact in list(zip(answers, supporting_facts_passage_text)):
+                score.append(self.get_score(question['text'], answer, supporting_fact))
 
-            content["score"] = score
+            score_softmax = F.softmax(torch.FloatTensor(score))
+            score_softmax = [float(elem) for elem in score_softmax]
+            content["score"] = score_softmax
 
             return content
         except Exception as e:
             return {'error': "{}".format(e)}
 
     def get_score(self, question, answer, supporting_fact):
-        return random()
+        hypothesis = question + ' ' + answer
+        premise = supporting_fact
 
+        encoded_input = self.tokenizer.batch_encode_plus([(premise, hypothesis)],
+                                                         padding="max_length", max_length=256,
+                                                         truncation=True,
+                                                         return_tensors='pt')
+
+        self.rerank_model.eval()
+        with torch.no_grad():
+            outputs = self.rerank_model(input_ids=encoded_input["input_ids"].to(self.device),
+                                        attention_mask=encoded_input["attention_mask"].to(self.device))
+
+            score = F.softmax(outputs.logits).squeeze()[0]
+            return float(score)
