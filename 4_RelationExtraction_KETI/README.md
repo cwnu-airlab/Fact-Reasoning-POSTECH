@@ -16,12 +16,11 @@
 
 ## Relation Extraction
 
-URL: http://aircketi.iptime.org:10022/
+URL: http://ketiair.com:10022/
 
 ## Google driver links
 
-[ket5-base-ko](https://drive.google.com/file/d/1d8FgJPZ5my-VAdyd7HPQoWzzCP1FGSg9/view?usp=sharing)
-[ket5-base-en](https://drive.google.com/file/d/1VR3npo-Th3mA0Dfw-_L0aB1yXIr3UJx6/view?usp=sharing)
+[ket5-base-ko](https://drive.google.com/file/d/1Xwd0xrp2eEbAbpnUWdLdG0U3kYeUd1q-/view?usp=sharing)
 
 ## Download models from Google drive
 
