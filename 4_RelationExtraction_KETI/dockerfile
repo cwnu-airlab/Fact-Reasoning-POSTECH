@@ -1,18 +1,18 @@
-# docker build -t factual_reasoning/relation_extraction:dummay .
+# docker build -t factual_reasoning/relation_extraction .
 
-# docker tag factual_reasoning/relation_extraction:dummay 10.0.0.161:5000/relation_extraction:dummay
-# docker push 10.0.0.161:5000/relation_extraction:dummay
+# docker tag factual_reasoning/relation_extraction 10.0.0.161:5000/relation_extraction
+# docker push 10.0.0.161:5000/relation_extraction
 
-# docker run --gpus all --rm -d -it -p 12345:5000 --name relation_extraction factual_reasoning/relation_extraction:dummay
+# docker run --gpus all --rm -d -it -p 12345:5000 --name relation_extraction factual_reasoning/relation_extraction
 # or if you use nvidia-docker
-# nvidia-docker run --rm -d -it -p 12345:5000 --name relation_extraction factual_reasoning/relation_extraction:dummay
+# nvidia-docker run --rm -d -it -p 12345:5000 --name relation_extraction factual_reasoning/relation_extraction
 
-# docker -H 10.0.0.110:2375 run --gpus all --rm -d -it --network="dockernet" --ip="10.1.92.122" --name relation_extraction 10.0.0.161:5000/relation_extraction:dummay
+# docker -H 10.0.0.110:2375 run --gpus all --rm -d -it --network="dockernet" --ip="10.1.92.122" --name relation_extraction 10.0.0.161:5000/relation_extraction
 
 # port: ketiair.com:10022 --> 10.1.92.122:5000
 
 FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-devel
-LABEL maintainer "KETI AIRC sankim <kimsan0622@keti.re.kr>"
+LABEL maintainer "KETI AIRC hyeontae <dchs504@keti.re.kr>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -26,11 +26,19 @@ RUN locale-gen en_US.UTF-8 && update-locale
 ENV LC_ALL=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 
-RUN pip install flask
+RUN pip install flask 
+RUN pip install "transformers==4.9.0"
+RUN pip install sentencepiece protobuf
 
 ADD app /root/app
 
 WORKDIR /root/app
+
+# download move weights of model and move it to the ./app directory for fast build
+# comment below script after above action
+RUN cd /root/app && \
+    python download_file_from_google_drive.py https://drive.google.com/file/d/1Xwd0xrp2eEbAbpnUWdLdG0U3kYeUd1q-/view?usp=sharing T5EncoderForSequenceClassificationFirstSubmeanObjmean_ket5-base-ko_weights.tgz && \
+    tar xvzf T5EncoderForSequenceClassificationFirstSubmeanObjmean_ket5-base-ko_weights.tgz
 
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
 
