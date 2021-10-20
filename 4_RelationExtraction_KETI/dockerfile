@@ -37,8 +37,8 @@ WORKDIR /root/app
 # download move weights of model and move it to the ./app directory for fast build
 # comment below script after above action
 RUN cd /root/app && \
-    python download_file_from_google_drive.py https://drive.google.com/file/d/1Xwd0xrp2eEbAbpnUWdLdG0U3kYeUd1q-/view?usp=sharing T5EncoderForSequenceClassificationFirstSubmeanObjmean_ket5-base-ko_weights.tgz && \
-    tar xvzf T5EncoderForSequenceClassificationFirstSubmeanObjmean_ket5-base-ko_weights.tgz
+    python download_file_from_google_drive.py https://drive.google.com/file/d/12PJhN4SkS2XF75Bn-Q4YzlmK_SKr_T2v/view?usp=sharing T5EncoderForSequenceClassificationFirstSubmeanObjmean_KETI-AIR_ke-t5-base.tgz && \
+    tar xvzf T5EncoderForSequenceClassificationFirstSubmeanObjmean_KETI-AIR_ke-t5-base.tgz
 
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
 
