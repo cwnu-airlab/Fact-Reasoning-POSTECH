@@ -15,7 +15,7 @@ class Service:
     task = [
         {
             'name': "relation_extraction",
-            'description': 'dummy task'
+            'description': 'Relation Extraction Version 1.1'
         }
     ]
 
@@ -38,25 +38,6 @@ class Service:
                     'error': "{}".format(e)
                 }
             ), 400
-
-
-# {
-#   "doc":{
-#     "text":"킬러의 보디가드는 2017년 미국의 액션 코미디 영화로, 살인청부업자와 그의 보디가드 콤비의 이야기를 그린다. 패트릭 휴스 감독이 연출하고 라이언 레이놀즈, 새뮤얼 L. 잭슨, 게리 올드먼, 엘로디 융, 살마 아예크가 출연한다.",
-#     "language":"kr",
-#     "domain":"common-sense"
-#   },
-#    "arg_pairs":[
-#    [
-#      [0,7],
-#      [11,14]
-#    ],
-#    [
-#      [0,7],
-#      [17,29]
-#    ]
-#  ]
-# }
 
 
 class RelationExtraction(object):
@@ -119,12 +100,12 @@ class RelationExtraction(object):
             re_dict.append({
                 "sentence": text,
                 "subject_entity": {
-                    "word": text[arg[0][0]:arg[0][1]],
+                    "word": text[arg[0][0]:arg[0][1]+1],
                     "start_idx": arg[0][0],
                     "end_idx": arg[0][1]
                 },
                 "object_entity": {
-                    "word": text[arg[1][0]:arg[1][1]],
+                    "word": text[arg[1][0]:arg[1][1]+1],
                     "start_idx": arg[1][0],
                     "end_idx": arg[1][1]
                 }
@@ -256,18 +237,14 @@ if __name__ == "__main__":
 
     example_content = {
         "doc":{
-        "text":"킬러의 보디가드는 2017년 미국의 액션 코미디 영화로, 살인청부업자와 그의 보디가드 콤비의 이야기를 그린다. 패트릭 휴스 감독이 연출하고 라이언 레이놀즈, 새뮤얼 L. 잭슨, 게리 올드먼, 엘로디 융, 살마 아예크가 출연한다.",
-        "language":"kr",
-        "domain":"common-sense"
+            "text":"제2총군은 태평양 전쟁 말기에 일본 본토에 상륙하려는 연합군에게 대항하기 위해 설립된 일본 제국 육군의 총군이었다.",
+            "language":"kr",
+            "domain":"common-sense"
         },
         "arg_pairs":[
             [
-                [0,8],
-                [10,14]
-            ],
-            [
-                [0,8],
-                [16,29]
+                [0,3],
+                [48,55]
             ]
         ]
     }
