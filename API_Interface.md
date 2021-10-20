@@ -656,26 +656,54 @@
 | Key       | Value                                      | Explanation                                                  |
 | --------- | ------------------------------------------ | ------------------------------------------------------------ |
 | doc       | str                                        | (required) 관계 추출을 수행할 문서                           |
-| arg_pairs | list[tuple[tuple[int,int],tuple[int,int]]] | (optional) 관계를 알고 싶은 객체 쌍들의 문서 내 시작･종료 위치, 주로 주어･목적어 쌍 |
+| arg_pairs | list[list[list[int,int],list[int,int]]] | (optional) 관계를 알고 싶은 객체 쌍들의 문서 내 시작･종료 위치, 주로 주어･목적어 쌍 |
 
-* 예시
+<details>
+<summary> * 입력 예시 (click)</summary>
+<div markdown="1">
 
 ```json
 {
-  "doc":"킬러의 보디가드는 2017년 미국의 액션 코미디 영화로, 살인청부업자와 그의 보디가드 콤비의 이야기를 그린다. 패트릭 휴스 감독이 연출하고 라이언 레이놀즈, 새뮤얼 L. 잭슨, 게리 올드먼, 엘로디 융, 살마 아예크가 출연한다.",
+  "doc": "문성민은 경기대학교에 입학하여 아내인 이선희와 함께 경기대학교의 전성기를 이끌면서 하계대회, 전국체전, 최강전 등 3관왕을 이룬다.",
   "arg_pairs":[
     [
-      [0,7],
-      [11,14]
+      [0,2],
+      [5,8]
     ],
     [
-      [0,7],
-      [17,29]
+      [0,2],
+      [21,23]
     ]
   ]
 }
 ```
 
+</div>
+</details>
+
+<details>
+<summary> * 출력 예시 (click)</summary>
+<div markdown="1">
+
+```json
+{
+  "result":
+    [
+      {
+        "subject": "문성민",
+        "relation": "per:schools_attended",
+        "object": "경기대학"
+      },
+      {
+        "subject": "문성민",
+        "relation": "per:spouse",
+        "object": "이선희"
+    }
+  ]
+}
+```
+</div>
+</details>
 
 
 ## 06-KnowledgeMerging-YONSEI
