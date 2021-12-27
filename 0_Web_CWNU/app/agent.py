@@ -58,7 +58,7 @@ class Service:
 	
 	def do(self, content):
 		logger.info(content)
-		if content['example'] != 'None':
+		if content['question'].strip() == '':
 			content['question'] = content['example']
 		try:
 			ret = self.predict(content)
@@ -264,5 +264,5 @@ def html_font(text,cls='result_head',color='powderblue',font_color='#000000'):
 
 if __name__=='__main__':
 	service = Service()
-	content = {'question': '샤이닝을 부른 가수의 고향은 어딘가요', 'cli_ip': 1111, 'model': 'common-sense'}
+	content = {'question':{'text': '', 'cli_ip': '10.100.54.146', 'domain': 'common-sense', 'example': '데드풀 감독이랑  킬러의 보디가드 감독이 같은 사람이야?', 'language': 'kr'}}
 	predict = service.do(content = content)
