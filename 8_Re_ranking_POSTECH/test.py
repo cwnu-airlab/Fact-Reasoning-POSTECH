@@ -14,8 +14,12 @@ print(response.text)
 task_q = '/api/task'
 data = json.dumps(
     {
-        "question": "Were both of the following rock groups formed in California: Dig and Thinking Fellers Union Local 282?",
-        "answers": ["yes",
+        "question": {
+            "language":"en",
+            "text":"Were both of the following rock groups formed in California: Dig and Thinking Fellers Union Local 282?",
+            "domain":"common-sense"
+        },
+        "answer_list": ["yes",
                     "Califonia",
                     "no"],
         "supporting_facts": [
