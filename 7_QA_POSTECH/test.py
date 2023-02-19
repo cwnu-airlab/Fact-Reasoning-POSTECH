@@ -2,7 +2,7 @@ import json
 import requests
 from urllib.parse import urljoin
 
-URL = 'http://127.0.0.1:12345/'
+URL = 'http://127.0.0.1:5001/'
 
 # test task_list
 task_list_q = '/api/task_list'
@@ -14,10 +14,14 @@ print(response.text)
 task_q = '/api/task'
 data = json.dumps(
     {
-        "passage": [{"doc_id": "a", "score": 0.1, "text":"The Semmering railway (German: \"Semmeringbahn\" ) in Austria, which starts at Gloggnitz and leads over the Semmering to Mürzzuschlag was the first mountain railway in Europe built with a standard gauge track."},
-                    {"doc_id": "b", "score": 0.1, "text":"It is commonly referred to as the world's first true mountain railway, given the very difficult terrain and the considerable altitude difference that was mastered during its construction."},
-                    {"doc_id": "c", "score": 0.1, "text":"It is still fully functional as a part of the Southern Railway which is operated by the Austrian Federal Railways."}],
-        "question": "what is the first mountain railway in Europe?"
+        "_id": "3d2ef",
+        "question": "Allison Gross is a character in a story which applies what writing technique that introduces characters in threes?",
+        "context": [("Allison Gross",
+                     'Allison Gross, a hideous witch, tries to bribe the narrator to be her "leman". She combed his hair, first. When a scarlet mantle, a silk shirt with pearls, and a golden cup all fail, she blows on a horn three times, making an oath to make him regret it; then she strikes him with a silver wand, turning him into a wyrm (dragon) bound to a tree. His sister Maisry came to him to comb his hair. One day the Seelie Court came by, and a queen stroked him three times, turning him back into his proper form.'),
+                    ('Rule of three (writing)',
+                     'The rule of three is a writing principle that suggests that events or characters introduced in threes are more humorous, satisfying, or effective in execution of the story and engaging the reader. The reader or audience of this form of text is also thereby more likely to remember the information conveyed. This is because having three entities combines both brevity and rhythm with having the smallest amount of information to create a pattern. It makes the author or speaker appear knowledgeable while being both simple and catchy.')
+                     ],
+        "lang_type": "en"
     }
     )
 headers = {'Content-Type': 'application/json; charset=utf-8'} # optional
