@@ -1,0 +1,7 @@
+{
+    "kr_common-sense": {
+        "hf_path": "T5EncoderForSequenceClassificationFirstSubmeanObjmean_KETI-AIR_ke-t5-base",
+        "model_name": "T5EncoderForSequenceClassificationFirstSubmeanObjmean",
+        "pre_trained_tokenizer": "KETI-AIR/ke-t5-base"
+    }
+}

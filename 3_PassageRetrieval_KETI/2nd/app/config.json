@@ -1,0 +1,27 @@
+{
+    "kr_common-sense": {
+        "hf_path": "T5EncoderSimpleMomentumRetriever_ket5-base-ko-0929_weights",
+        "model_name": "T5EncoderSimpleMomentumRetriever",
+        "pre_trained_tokenizer": "KETI-AIR/ke-t5-base",
+        "use_gpu": false,
+        "model_gpu": 0,
+        "scorer_gpu": null
+    },
+    "en_common-sense": {
+        "hf_path": "T5EncoderSimpleMomentumRetriever_ket5-base-en_weights",
+        "model_name": "T5EncoderSimpleMomentumRetriever",
+        "pre_trained_tokenizer": "KETI-AIR/ke-t5-base",
+        "use_gpu": false,
+        "model_gpu": 0,
+        "scorer_gpu": null
+    },
+    "kr_law": {
+        "hf_path": "hf",
+        "model_name": "T5MeanBiEncoderRetriever",
+        "pre_trained_tokenizer": "KETI-AIR/ke-t5-base",
+        "use_gpu": false,
+        "model_gpu": 0,
+        "scorer_gpu": null,
+        "squeeze": true
+    }
+}

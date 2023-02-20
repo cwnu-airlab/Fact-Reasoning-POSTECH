@@ -134,3 +134,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+4_RelationExtraction_KETI/2nd/app/re_e50_linear_lr0.0008_0
+4_RelationExtraction_KETI/2nd/app/RE_model_2nd.tgz
+3_PassageRetrieval_KETI/2nd/app/hf
+3_PassageRetrieval_KETI/2nd/app/T5EncoderSimpleMomentumRetriever_ket5-base-ko-0929_weights
+3_PassageRetrieval_KETI/2nd/app/T5EncoderSimpleMomentumRetriever_ket5-base-en_weights
+3_PassageRetrieval_KETI/2nd/app/T5EncoderSimpleMomentumRetriever_ket5-base-en_weights.tgz
+3_PassageRetrieval_KETI/2nd/app/T5EncoderSimpleMomentumRetriever_ket5-base-ko-0929_weights.tgz
+3_PassageRetrieval_KETI/2nd/app/T5MeanBiEncoderRetriever_ket5-base-law-kr_weights.tgz
