@@ -1,5 +1,15 @@
 import json
 import random
+import sys 
+import os 
+
+from csr_mhqa.argument_parser import default_train_parser, complete_default_train_parser, json_to_argv
+from csr_mhqa.utils import *
+
+from models.NGN import *
+from typing import List 
+
+from utils import get_answer_en, get_answer_ko
 
 class Service:
     task = [
@@ -29,55 +39,91 @@ class Service:
                 }
             ), 400
 
+
 class MRCModel(object):
     def __init__(self):
-        pass
-    def answer_predict(self, content):
-        passage = content.get('passage', None)
-        question = content.get('question', None)
 
-        if passage is None:
+        # Initialize argument parser for initializing parameters
+        parser = default_train_parser()
+        argv = json_to_argv("predict.json")
+        args = parser.parse_args(argv)
+        args = complete_default_train_parser(args)
+
+        torch.cuda.set_device(0)
+
+        model_en_path = "./pretrained_model/model_final_en.pkl"
+        model_ko_path = "./pretrained_model/model_final_ko.pkl"
+
+        # english model initilization
+        model_en = NoGraphNetwork(config=args, lang_type='en')
+        if model_en_path is not None:
+            model_en.load_state_dict(torch.load(model_en_path),strict=False)
+        model_en.to(args.device)
+        model_en.eval()
+
+        # korean model initilization 
+        model_ko = NoGraphNetwork(config=args, lang_type='ko')
+        if model_ko_path is not None:
+            model_ko.load_state_dict(torch.load(model_ko_path),strict=False)
+        model_ko.to(args.device)
+        model_ko.eval()
+
+        self.model_en = model_en
+        self.model_ko = model_ko
+
+    def check_input(self, content):
+        _id = content.get("_id", None)
+        question = content.get('question', None).replace("\r\n", "")
+        context = content.get('context', None)
+        lang_type = content.get('lang_type', None)
+
+        if _id is None:
             return {
-                'error': "invalid passage"
+                'error': "Invalid id"
+            }
+        if context is None:
+            return {
+                'error': "Invalid context"
             }
         elif question is None:
             return {
-                'error': "invalid question"
+                'error': "Invalid question"
             }
-        else:
-            passage_concat = str()
+        elif lang_type is None:
+            return {
+                "error": "Invalid language type"
+            }
+        
+        return _id, question, context, lang_type
 
-            for single_passage in passage:
-                passage_concat += single_passage["text"]
+    def answer_predict(self, content):
+        _id, question, context, lang_type = self.check_input(content)
 
-            answer, answer_context, supporting_fact, joint_f1, joint_em = self.get_qa_result(question, passage_concat)
+        context_texts_list = []
+        if isinstance(context[0][1], List):
+            # context is list(str, list(str)) format
+            context_texts_list = [" ".join(single_context[1].replace("\r\n", "")) for single_context in context]
+        elif isinstance(context[0][1], str):
+            # context is list(str, str) format
+            context_texts_list = [single_context[1].replace("\r\n", "") for single_context in context]
 
-            return {'question': question,
-                    'answer': answer,
-                    'answer_context': answer_context,
-                    'supporting_fact': supporting_fact,
-                    'joint_f1': joint_f1,
-                    'joint_em': joint_em}
+        flattend_context_str = " ".join(context_texts_list)
+        if lang_type == 'en':
+            answer, sup_sents, sup_sents_no_index, answer_confidence_score = get_answer_en(flattend_context_str, question, self.model_en)
+
+        elif lang_type == 'kr':
+            answer, sup_sents, sup_sents_no_index, answer_confidence_score = get_answer_ko(flattend_context_str, question, self.model_ko)
+        
+
+        return {
+            '_id': _id,
+            'question': {
+                'text': question,
+                'language':lang_type,
+                'domain': 'common-sense'
+            },
+            'answer': answer,
+            'supporting_fact': sup_sents_no_index,
+            'score': answer_confidence_score
+        }
     
-    def get_qa_result(self, question, passage_concat):
-        
-        answer = ['30','Semmering railway','yes'] # possible answer type: 'passage_span', 'question_span', 'multiple_span', 'add/sub', 'count', 'yes/no'
-        
-        answer_context = '{"value": "30", \
-                           "numbers": [{"value": 24, "sign": 1}, {"value": 6, "sign": 1}, {"value": 50, "sign": 0}]}' # 24 + 6 = 30
-        
-        supporting_fact = "The Semmering railway (German: \"Semmeringbahn\" ) in Austria, which starts at Gloggnitz and leads over the Semmering to Mürzzuschlag was the first mountain railway in Europe built with a standard gauge track."
-        
-        joint_f1 = round(random.uniform(74, 76), 2)
-        joint_em = round(random.uniform(47, 49), 2)
-
-        return answer, answer_context, supporting_fact, joint_f1, joint_em
-
-if __name__ == "__main__":
-    mrc = MRCModel()
-    ret = mrc.answer_predict({"passage": [{"doc_id": "a", "score": 0.1, "text":"The Semmering railway (German: \"Semmeringbahn\" ) in Austria, which starts at Gloggnitz and leads over the Semmering to Mürzzuschlag was the first mountain railway in Europe built with a standard gauge track."},
-                    {"doc_id": "b", "score": 0.1, "text":"It is commonly referred to as the world's first true mountain railway, given the very difficult terrain and the considerable altitude difference that was mastered during its construction."},
-                    {"doc_id": "c", "score": 0.1, "text":"It is still fully functional as a part of the Southern Railway which is operated by the Austrian Federal Railways."}],
-        "question": "what is the first mountain railway in Europe?"})
-    print(ret)
-

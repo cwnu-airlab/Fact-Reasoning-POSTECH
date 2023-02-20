@@ -16,7 +16,12 @@ Artificial intelligence technology inferring issues and logically supporting fac
 #### 관련 링크
 
 * 파일 공유: [구글 드라이브](https://drive.google.com/drive/folders/1abwTalLiAhGk3c4CdMgxJtUf53fRzWzP?usp=sharing)
-* 공개 github: [GitHub](https://github.com/cwnu-airlab/Fact-Reasoning)
+* 공개 github
+  * https://github.com/cwnu-airlab/Fact-Reasoning-CWNU
+  * https://github.com/cwnu-airlab/Fact-Reasoning-KETI
+  * https://github.com/cwnu-airlab/Fact-Reasoning-YONSEI
+  * https://github.com/cwnu-airlab/Fact-Reasoning-POSTECH
+
 
 
 ## 기술개발 목표

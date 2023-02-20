@@ -1030,7 +1030,7 @@
 | Key       | Value                                      | Explanation                                                  |
 | --------- | ------------------------------------------ | ------------------------------------------------------------ |
 | doc       | str                                        | (required) 관계 추출을 수행할 문서                           |
-| arg_pairs | list[tuple[tuple[int,int],tuple[int,int]]] | (optional) 관계를 알고 싶은 객체 쌍들의 문서 내 시작･종료 위치, 주로 주어･목적어 쌍 |
+| arg_pairs | list[list[list[int,int],list[int,int]]] | (optional) 관계를 알고 싶은 객체 쌍들의 문서 내 시작･종료 위치, 주로 주어･목적어 쌍 |
 
 * 입력 예시
 
@@ -1050,6 +1050,32 @@
 }
 ```
 
+</div>
+</details>
+
+<details>
+<summary> * 출력 예시 (click)</summary>
+<div markdown="1">
+
+```json
+{
+  "result":
+    [
+      {
+        "subject": "문성민",
+        "relation": "per:schools_attended",
+        "object": "경기대학"
+      },
+      {
+        "subject": "문성민",
+        "relation": "per:spouse",
+        "object": "이선희"
+    }
+  ]
+}
+```
+</div>
+</details>
 
 * 출력 예시
 
