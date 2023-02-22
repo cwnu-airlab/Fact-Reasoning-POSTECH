@@ -1,0 +1,9 @@
+{
+    "model_type_en": "albert",
+    "model_name_or_path_en": "albert-xxlarge-v2",
+
+    "model_type_ko": "electra",
+    "model_name_or_path_ko": "monologg/koelectra-base-v3-discriminator",
+
+    "fp16": "false"
+}
