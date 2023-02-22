@@ -73,15 +73,14 @@ class RerankModel(object):
     def check_input(self, content):
         question = content.get("question", None)
         answers = content.get("answer_list", None)
-        supporting_facts_span = content.get("supporting_facts_list", None)
-        supporting_facts_passage = content.get("supporting_passage_list", None)
+        supporting_facts = content.get("supporting_facts", None)
 
-        if not question or not answers or not supporting_facts_passage:
+        if not question or not answers or not supporting_facts:
             return {
                 'error': "invalid query"
             }
 
-        if len(answers) != len(supporting_facts_passage):
+        if len(answers) != len(supporting_facts):
             return {
                 'error': "(list of answer) and (list of supporting fact) should have same length for ranking"
             }
@@ -99,20 +98,19 @@ class RerankModel(object):
             self.rerank_model = self.rerank_model_eng
             self.tokenizer = self.tokenizer_eng
 
-        return question, answers, supporting_facts_passage
+        return question, answers, supporting_facts
 
     def rerank_pairs(self, content):
-        question, answers, supporting_facts_passage = self.check_input(content)
-        supporting_facts_passage_text = [qa_result["text"] for qa_result in supporting_facts_passage]
+        question, answers, supporting_facts = self.check_input(content)
 
         try:
             score = []
-            for answer, supporting_fact in list(zip(answers, supporting_facts_passage_text)):
+            for answer, supporting_fact in list(zip(answers, supporting_facts)):
                 score.append(self.get_score(question['text'], answer, supporting_fact))
 
             score_softmax = F.softmax(torch.FloatTensor(score))
             score_softmax = [float(elem) for elem in score_softmax]
-            content["score"] = score_softmax
+            content["reranking_score"] = score_softmax
 
             return content
         except Exception as e:
