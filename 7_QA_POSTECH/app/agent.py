@@ -11,6 +11,10 @@ from typing import List
 
 from utils import get_answer_en, get_answer_ko
 
+#torch.manual_seed(42)
+random.seed(42)
+#np.random.seed(42)
+
 class Service:
     task = [
         {

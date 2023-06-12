@@ -3,6 +3,7 @@ import requests
 from urllib.parse import urljoin
 
 URL = 'http://127.0.0.1:5001/'
+URL = 'http://thor.nlp.wo.tc:12347'
 
 # test task_list
 task_list_q = '/api/task_list'
@@ -24,6 +25,15 @@ data = json.dumps(
         "lang_type": "en"
     }
     )
+data = json.dumps({
+    "_id": "asdf",
+    "question": "샤를 드골 대통령과 콘라드 아데나워 총리가 서약한 조약은 무엇인가?",
+    "context": [
+        ("엘리제 궁전", "엘리제 궁전은 1848년부터 프랑스 대통령의 관저이다."),
+        ("엘리제 조약", "엘리제 조약은 1963년 1월 22일 파리 엘리제 궁전에서 샤를 드골 대통령과 콘라드 아데나워 총리가 체결한 프랑스와 서독 간 우호 조약이다.")
+        ],
+    "lang_type":"kr",
+    })
 headers = {'Content-Type': 'application/json; charset=utf-8'} # optional
 
 response = requests.post(urljoin(URL, task_q), data=data, headers=headers)
