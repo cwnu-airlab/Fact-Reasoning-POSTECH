@@ -4,6 +4,10 @@ import torch
 from transformers import ElectraForSequenceClassification, ElectraConfig, ElectraTokenizerFast
 import torch.nn.functional as F
 
+torch.manual_seed(42)
+#random.seed(42)
+#np.random.seed(42)
+
 
 class Service:
     task = [
@@ -101,6 +105,7 @@ class RerankModel(object):
         return question, answers, supporting_facts
 
     def rerank_pairs(self, content):
+        output = self.check_input(content)
         question, answers, supporting_facts = self.check_input(content)
 
         try:
@@ -132,3 +137,13 @@ class RerankModel(object):
 
             score = F.softmax(outputs.logits).squeeze()[0]
             return float(score)
+
+if __name__=="__main__":
+    data = {'question': {'text': '샤를 드골 대통령과 콘라드 아데나워 총리가 서명한 조약은 어느 도시에서 이루어졌는가?', 'language': 'kr', 'domain': 'common-sense'}, 
+            'answer_list': ['부다페스트', '헝가리의 항구, 오클라호마와 벨라우즈 타이완 주입니다. argues) 베스르', '헝가리의 항구, 오클라호마와 벨라우즈 타이완 주입니다. argues) 로르'], 
+            'supporting_facts': ['아제르외그(Azördög)는 헝가리의 연극으로,', '폴 거리의 소년》(The Boys of Paul Street, 헝가리어: A Pál', '몰나르는 부다페스트에서 태어났다. 그는 제2차 세계 대전 동안 헝가리 유대인에 대한 박해']} 
+    print(data)
+    model = RerankModel()
+    print(model)
+    output = model.rerank_pairs(data)
+    print(output)

@@ -2,7 +2,7 @@ import json
 import requests
 from urllib.parse import urljoin
 
-URL = 'http://127.0.0.1:12345/'
+URL = 'http://thor.nlp.wo.tc:12348/'
 
 # test task_list
 task_list_q = '/api/task_list'
